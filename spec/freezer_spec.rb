@@ -17,5 +17,10 @@ describe Order do
     it "should add an unfreeze association method when enabling freezing" do
       Order.new.should respond_to(:unfreeze_ship_method)
     end
+  
+    it "should not add freeze/unfreeze methods to cart association since it doesn't have a frozen column" do
+      Order.new.should_not respond_to(:freeze_cart)
+      Order.new.should_not respond_to(:unfreeze_cart)
+    end
   end
 end
