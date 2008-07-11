@@ -1,0 +1,113 @@
+= Association Freezer
+
+Freeze a belongs_to association to ignore any future changes.
+
+NOTE: This gem is in very early development, and the documentation 
+below is not yet implemented.
+
+
+== Install
+
+First specify it in your Rails config.
+
+	config.gem 'ryanb-association-freezer', :lib => 'association_freezer', :source => 'http://gems.github.com'
+
+And then install it.
+
+  rake gems:install
+
+Follow the instructions below to finish setup. Rails 2.1 or later 
+required.
+
+
+== Scenario
+
+Let's say we have an Order model with a couple belongs_to associations 
+for setting the billing and shipping address.
+
+  class Order < ActiveRecord::Base
+    belongs_to :shipping_address, :class_name => 'Address'
+    belongs_to :billing_address, :class_name => 'Address'
+    # ...
+  end
+
+Consider this scenario. A user comes to the site and places an order. 
+Then he comes back a month later and changes his address. Now our Order 
+model is incorrect, it will point to this new address instead of the 
+old one he placed the order with.
+
+There's a couple ways to solve this, one is to create a new Address 
+model whenever one edits the address. Another is to freeze the address 
+attributes upon placing an order so it isn't effected when the original 
+Address changes. This gem will help with the latter.
+
+
+== Usage
+
+First you need to generate a binary (or blob) column to hold each 
+frozen assoiation. The name of the column must start with "frozen_" and 
+end with the association name. You can do that with a migration like 
+this:
+
+  script/generate migration add_frozen_addresses_to_orders \
+    frozen_billing_address:binary frozen_shipping_address:binary
+
+
+Next, enable the association freezer on your model. This must be done 
+AFTER the associations have been specified.
+
+  class Order < ActiveRecord::Base
+    belongs_to :shipping_address, :class_name => 'Address'
+    belongs_to :billing_address, :class_name => 'Address'
+    enable_association_freezer
+    #...
+  end
+
+Now you can freeze the association at will:
+
+  # in order
+  def purchase
+    #...
+    freeze_association :billing_address
+    freeze_association :shipping_address
+    save!
+  end
+
+When freezing an association, the attributes will be set to the frozen 
+column. However, the model is not saved automatically, so you must call 
+save at some point after freezing.
+
+Here's where the magic starts. Now when you fetch the frozen 
+association (order.billing_address), the association freezer will step 
+in and return an Address model which is built from the attributes in 
+the frozen column, not the attributes in the addresses table. 
+Therefore, any changes to the address will not effect the order's 
+address. "freeze" is called on the model before returning it to prevent 
+accidentally altering the data.
+
+You can also unfreeze an already frozen association if you want it to 
+use the database record instead.
+
+  unfreeze_association :billing_address
+
+You can then freeze it again to use the updated attributes.
+
+
+== Alternative Usage
+
+Not only is this gem good at handling the situation above, but it can 
+also be used as a caching technique. If the belongs_to association is 
+frequently accessed, it can be more efficient to freeze (cache) it to 
+remove the need for a database call. Of course with this approach you 
+want it to stay in sync with the database, so you'll need to expire the 
+cache (refreeze the association) whenever the associated model changes.
+
+
+== Development
+
+This project can be found on github at the following URL.
+
+http://github.com/ryanb/association-freezer/
+
+If you would like to contribute to this project, please fork the 
+repository and send me a pull request.
