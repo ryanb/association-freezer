@@ -68,8 +68,8 @@ Now you can freeze the association at will:
   # in order
   def purchase
     #...
-    freeze_association :billing_address
-    freeze_association :shipping_address
+    freeze_billing_address
+    freeze_shipping_address
     save!
   end
 
@@ -88,7 +88,7 @@ accidentally altering the data.
 You can also unfreeze an already frozen association if you want it to 
 use the database record instead.
 
-  unfreeze_association :billing_address
+  unfreeze_billing_address
 
 You can then freeze it again to use the updated attributes.
 
