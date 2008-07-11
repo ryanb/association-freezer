@@ -1,0 +1,12 @@
+CHANGELOG
+lib/association_freezer/model_additions.rb
+lib/association_freezer.rb
+LICENSE
+README
+spec/association_freezer/model_additions_spec.rb
+spec/models/order.rb
+spec/models/ship_method.rb
+spec/spec_helper.rb
+tasks/deployment.rake
+tasks/spec.rake
+Manifest
