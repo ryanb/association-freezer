@@ -24,6 +24,11 @@ describe Order do
       @order.should_not respond_to(:unfreeze_cart)
     end
     
+    it "should not freeze association without specifying" do
+      @order.ship_method = ShipMethod.create!
+      @order.ship_method(true).should_not be_frozen
+    end
+    
     describe "when freezing association" do
       before(:each) do
         @ship_method = ShipMethod.create!(:price => 5)
@@ -41,6 +46,11 @@ describe Order do
       
       it "should still consider model frozen after reload" do
         @order.ship_method(true).should be_frozen
+      end
+      
+      it "should ignore changes to associated model" do
+        @ship_method.update_attribute(:price, 8)
+        @order.ship_method(true).price.should == 5
       end
     end
   end
