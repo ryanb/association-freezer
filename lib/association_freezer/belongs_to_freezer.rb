@@ -18,10 +18,14 @@ module AssociationFreezer
       frozen || nonfrozen(*args)
     end
     
+    def frozen?
+      frozen_data
+    end
+    
     private
     
     def frozen
-      @frozen ||= load_frozen if frozen_data
+      @frozen ||= load_frozen if frozen?
     end
     
     def load_frozen
@@ -38,10 +42,6 @@ module AssociationFreezer
     
     def frozen_data
       @owner.read_attribute("frozen_#{name}")
-    end
-    
-    def attribute_name
-      "frozen_#{name}"
     end
     
     def target_class

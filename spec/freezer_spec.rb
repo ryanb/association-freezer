@@ -78,6 +78,15 @@ describe Order do
         @order.unfreeze_ship_method
         @order.ship_method.price.should == 8
       end
+      
+      it "should raise an exception when attempting to save associated model" do
+        lambda { @order.ship_method.save }.should raise_error(Exception)
+        lambda { @order.ship_method.save! }.should raise_error(Exception)
+      end
+      
+      it "should raise an exception when attempting to replace association" do
+        lambda { @order.ship_method = ShipMethod.new }.should raise_error(Exception)
+      end
     end
   end
 end

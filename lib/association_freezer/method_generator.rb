@@ -29,6 +29,16 @@ module AssociationFreezer
         send(freezer).fetch(*args)
       end
       model_class.alias_method_chain reflection.name, :frozen_check
+      
+      generate_method "#{reflection.name}_with_frozen_check=" do |*args|
+        if send(freezer).frozen?
+          # TODO make this a custom exception
+          raise "Unable to set #{reflection.name} because association is frozen." 
+        else
+          send("#{reflection.name}_without_frozen_check=", *args)
+        end
+      end
+      model_class.alias_method_chain "#{reflection.name}=", :frozen_check
     end
     
     private
