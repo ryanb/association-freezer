@@ -1,3 +1,5 @@
+* frozen record is no longer considered new
+
 * frozen record keeps id attribute of old record
 
 * don't raise exception when trying to freeze nil association

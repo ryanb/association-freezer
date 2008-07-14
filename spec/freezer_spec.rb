@@ -97,6 +97,10 @@ describe Order do
       it "should keep id attribute for association" do
         @order.ship_method.id.should == @ship_method.id
       end
+      
+      it "should not consider association a new record" do
+        @order.ship_method.should_not be_new_record
+      end
     end
   end
 end

@@ -32,6 +32,8 @@ module AssociationFreezer
       attributes = Marshal.load(frozen_data)
       target = target_class.new(attributes.except('id'))
       target.id = attributes['id']
+      target.instance_variable_set('@new_record', false)
+      target.readonly!
       target.freeze
     end
     
