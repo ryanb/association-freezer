@@ -26,7 +26,7 @@ module AssociationFreezer
       end
       
       generate_method "#{reflection.name}_with_frozen_check" do |*args|
-        send(freezer).frozen(*args) || send("#{reflection.name}_without_frozen_check", *args)
+        send(freezer).fetch(*args)
       end
       model_class.alias_method_chain reflection.name, :frozen_check
     end

@@ -24,9 +24,17 @@ describe Order do
       @order.should_not respond_to(:unfreeze_cart)
     end
     
-    it "should not freeze association without specifying" do
+    it "should not be frozen at first" do
       @order.ship_method = ShipMethod.create!
       @order.ship_method(true).should_not be_frozen
+    end
+    
+    it "should freeze association in its current state" do
+      @ship_method = ShipMethod.create!(:price => 2)
+      @order.ship_method = @ship_method
+      @ship_method.price = 3
+      @order.freeze_ship_method
+      @order.ship_method.price.should == 3
     end
     
     describe "when freezing association" do

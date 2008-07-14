@@ -6,12 +6,15 @@ module AssociationFreezer
     end
     
     def freeze
-      @owner.send(name, true).freeze
-      freeze_to_db(Marshal.dump(@owner.send(name).attributes))
+      freeze_to_db(Marshal.dump(nonfrozen.attributes))
     end
     
     def unfreeze
       # TODO
+    end
+    
+    def fetch(*args)
+      frozen(*args) || nonfrozen(*args)
     end
     
     def frozen(force_reload = false)
@@ -23,6 +26,10 @@ module AssociationFreezer
     end
     
     private
+    
+    def nonfrozen(*args)
+      @owner.send("#{name}_without_frozen_check", *args)
+    end
     
     def freeze_to_db(data)
       @owner.write_attribute("frozen_#{name}", data)
