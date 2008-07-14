@@ -30,11 +30,17 @@ describe Order do
     end
     
     it "should freeze association in its current state" do
-      @ship_method = ShipMethod.create!(:price => 2)
-      @order.ship_method = @ship_method
-      @ship_method.price = 3
+      ship_method = ShipMethod.create!(:price => 2)
+      @order.ship_method = ship_method
+      ship_method.price = 3
       @order.freeze_ship_method
       @order.ship_method.price.should == 3
+    end
+    
+    it "should do nothing when attempting to freeze a nil association" do
+      @order.ship_method.should be_nil
+      lambda { @order.freeze_ship_method }.should_not raise_error
+      @order.ship_method.should be_nil
     end
     
     describe "when freezing association" do
@@ -80,12 +86,12 @@ describe Order do
       end
       
       it "should raise an exception when attempting to save associated model" do
-        lambda { @order.ship_method.save }.should raise_error(Exception)
-        lambda { @order.ship_method.save! }.should raise_error(Exception)
+        lambda { @order.ship_method.save }.should raise_error
+        lambda { @order.ship_method.save! }.should raise_error
       end
       
       it "should raise an exception when attempting to replace association" do
-        lambda { @order.ship_method = ShipMethod.new }.should raise_error(Exception)
+        lambda { @order.ship_method = ShipMethod.new }.should raise_error
       end
     end
   end

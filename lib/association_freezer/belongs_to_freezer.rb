@@ -6,7 +6,7 @@ module AssociationFreezer
     end
     
     def freeze
-      self.frozen_data = Marshal.dump(nonfrozen.attributes)
+      self.frozen_data = Marshal.dump(nonfrozen.attributes) if nonfrozen
     end
     
     def unfreeze

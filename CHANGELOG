@@ -1,3 +1,5 @@
+* don't raise exception when trying to freeze nil association
+
 * raise an exception when trying to replace frozen association
 
 *0.1.0* (July 14th, 2008)
