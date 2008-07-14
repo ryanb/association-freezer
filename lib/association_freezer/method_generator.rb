@@ -10,28 +10,28 @@ module AssociationFreezer
       # because otherwise it will result in an endless loop the way alias method works.
       return if previously_generated? || !frozen_column_exists?
       
-      association = @reflection
-        
-      generate_method "freeze_#{association.name}" do
-        send(association.name, true).freeze
-        write_attribute("frozen_#{association.name}", Marshal.dump(send(association.name).attributes))
+      reflection = @reflection
+      freezer = "#{reflection.name}_freezer"
+      
+      generate_method freezer do
+        read_attribute("@#{freezer}") || write_attribute("@#{freezer}", BelongsToFreezer.new(self, reflection))
       end
-  
-      generate_method "unfreeze_#{association.name}" do
+      
+      generate_method "freeze_#{reflection.name}" do
+        send(freezer).freeze
       end
-    
-      generate_method "#{association.name}_with_frozen_check" do |*args|
-        if !instance_variable_defined?("@#{association.name}") || args.first # force reload
-          if read_attribute("frozen_#{association.name}")
-            association.klass.new(Marshal.load(read_attribute("frozen_#{association.name}")).except('id'))
-          else
-            send("#{association.name}_without_frozen_check", *args)
-          end
-        end
-        instance_variable_get("@#{association.name}")
+      
+      generate_method "unfreeze_#{reflection.name}" do
+        send(freezer).unfreeze
       end
-      model_class.alias_method_chain association.name, :frozen_check
+      
+      generate_method "#{reflection.name}_with_frozen_check" do |*args|
+        send(freezer).frozen(*args) || send("#{reflection.name}_without_frozen_check", *args)
+      end
+      model_class.alias_method_chain reflection.name, :frozen_check
     end
+    
+    private
     
     def previously_generated?
       model_class.instance_methods.include? "freeze_#{@reflection.name}"
