@@ -1,9 +1,6 @@
 = Association Freezer
 
-Freeze a belongs_to association to ignore any future changes.
-
-NOTE: This gem is in very early development, and the documentation 
-below is not yet implemented.
+Freeze an Active Record belongs_to association to ignore any future changes.
 
 
 == Install
