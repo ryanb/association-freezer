@@ -6,36 +6,37 @@ module AssociationFreezer
     end
     
     def freeze
-      freeze_to_db(Marshal.dump(nonfrozen.attributes))
+      self.frozen_data = Marshal.dump(nonfrozen.attributes)
     end
     
     def unfreeze
-      # TODO
+      @frozen = nil
+      self.frozen_data = nil
     end
     
     def fetch(*args)
-      frozen(*args) || nonfrozen(*args)
-    end
-    
-    def frozen(force_reload = false)
-      if @frozen && !force_reload
-        @frozen
-      elsif frozen_in_db
-        @frozen = target_class.new(Marshal.load(frozen_in_db).except('id')).freeze
-      end
+      frozen || nonfrozen(*args)
     end
     
     private
+    
+    def frozen
+      @frozen ||= load_frozen if frozen_data
+    end
+    
+    def load_frozen
+      target_class.new(Marshal.load(frozen_data).except('id')).freeze
+    end
     
     def nonfrozen(*args)
       @owner.send("#{name}_without_frozen_check", *args)
     end
     
-    def freeze_to_db(data)
+    def frozen_data=(data)
       @owner.write_attribute("frozen_#{name}", data)
     end
     
-    def frozen_in_db
+    def frozen_data
       @owner.read_attribute("frozen_#{name}")
     end
     

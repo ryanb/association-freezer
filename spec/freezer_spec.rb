@@ -52,13 +52,31 @@ describe Order do
         @ship_method.should_not be_frozen
       end
       
-      it "should still consider model frozen after reload" do
+      it "should still consider model frozen after reloading association" do
         @order.ship_method(true).should be_frozen
       end
       
       it "should ignore changes to associated model" do
         @ship_method.update_attribute(:price, 8)
+        @order.ship_method.price.should == 5
         @order.ship_method(true).price.should == 5
+      end
+      
+      it "should be frozen after reloading order" do
+        @order.save!
+        @order.reload
+        @order.ship_method.should be_frozen
+      end
+      
+      it "should not be frozen when unfreezing" do
+        @order.unfreeze_ship_method
+        @order.ship_method.should_not be_frozen
+      end
+      
+      it "should restore original attributes when unfreezing" do
+        @ship_method.update_attribute(:price, 8)
+        @order.unfreeze_ship_method
+        @order.ship_method.price.should == 8
       end
     end
   end
