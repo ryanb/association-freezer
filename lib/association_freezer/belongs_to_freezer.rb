@@ -29,7 +29,10 @@ module AssociationFreezer
     end
     
     def load_frozen
-      target_class.new(Marshal.load(frozen_data).except('id')).freeze
+      attributes = Marshal.load(frozen_data)
+      target = target_class.new(attributes.except('id'))
+      target.id = attributes['id']
+      target.freeze
     end
     
     def nonfrozen(*args)

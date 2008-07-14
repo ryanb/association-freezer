@@ -11,11 +11,11 @@ describe Order do
       @order = Order.new
     end
     
-    it "should add a freeze association method when enabling freezing" do
+    it "should add a freeze association method" do
       @order.should respond_to(:freeze_ship_method)
     end
   
-    it "should add an unfreeze association method when enabling freezing" do
+    it "should add an unfreeze association method" do
       @order.should respond_to(:unfreeze_ship_method)
     end
   
@@ -92,6 +92,10 @@ describe Order do
       
       it "should raise an exception when attempting to replace association" do
         lambda { @order.ship_method = ShipMethod.new }.should raise_error
+      end
+      
+      it "should keep id attribute for association" do
+        @order.ship_method.id.should == @ship_method.id
       end
     end
   end
