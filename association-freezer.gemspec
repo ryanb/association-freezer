@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.description = %q{Freeze an Active Record belongs_to association.}
   s.email = %q{ryan (at) railscasts (dot) com}
   s.extra_rdoc_files = ["CHANGELOG", "lib/association_freezer/belongs_to_freezer.rb", "lib/association_freezer/method_generator.rb", "lib/association_freezer/model_additions.rb", "lib/association_freezer.rb", "LICENSE", "README", "tasks/deployment.rake", "tasks/spec.rake"]
-  s.files = ["association-freezer.gemspec", "CHANGELOG", "lib/association_freezer/belongs_to_freezer.rb", "lib/association_freezer/method_generator.rb", "lib/association_freezer/model_additions.rb", "lib/association_freezer.rb", "LICENSE", "Manifest", "README", "spec/freezer_spec.rb", "spec/lib/order.rb", "spec/lib/ship_method.rb", "spec/spec_helper.rb", "tasks/deployment.rake", "tasks/spec.rake", "tmp/test.sqlite3"]
+  s.files = ["CHANGELOG", "lib/association_freezer/belongs_to_freezer.rb", "lib/association_freezer/method_generator.rb", "lib/association_freezer/model_additions.rb", "lib/association_freezer.rb", "LICENSE", "Manifest", "README", "spec/freezer_spec.rb", "spec/lib/order.rb", "spec/lib/ship_method.rb", "spec/spec_helper.rb", "tasks/deployment.rake", "tasks/spec.rake", "tmp/test.sqlite3", "association-freezer.gemspec"]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/ryanb/association-freezer}
   s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Association-freezer", "--main", "README"]
