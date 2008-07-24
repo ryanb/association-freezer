@@ -8,11 +8,11 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ryan Bates"]
-  s.date = %q{2008-07-14}
+  s.date = %q{2008-07-24}
   s.description = %q{Freeze an Active Record belongs_to association.}
   s.email = %q{ryan (at) railscasts (dot) com}
   s.extra_rdoc_files = ["CHANGELOG", "lib/association_freezer/belongs_to_freezer.rb", "lib/association_freezer/method_generator.rb", "lib/association_freezer/model_additions.rb", "lib/association_freezer.rb", "LICENSE", "README", "tasks/deployment.rake", "tasks/spec.rake"]
-  s.files = ["CHANGELOG", "lib/association_freezer/belongs_to_freezer.rb", "lib/association_freezer/method_generator.rb", "lib/association_freezer/model_additions.rb", "lib/association_freezer.rb", "LICENSE", "Manifest", "README", "spec/freezer_spec.rb", "spec/lib/order.rb", "spec/lib/ship_method.rb", "spec/spec_helper.rb", "tasks/deployment.rake", "tasks/spec.rake", "tmp/test.sqlite3", "association-freezer.gemspec"]
+  s.files = ["association-freezer.gemspec", "CHANGELOG", "lib/association_freezer/belongs_to_freezer.rb", "lib/association_freezer/method_generator.rb", "lib/association_freezer/model_additions.rb", "lib/association_freezer.rb", "LICENSE", "Manifest", "README", "spec/freezer_spec.rb", "spec/lib/order.rb", "spec/lib/ship_method.rb", "spec/spec_helper.rb", "tasks/deployment.rake", "tasks/spec.rake", "tmp/test.sqlite3"]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/ryanb/association-freezer}
   s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Association-freezer", "--main", "README"]
@@ -37,22 +37,15 @@ end
 # 
 # require 'rubygems'
 # require 'rake'
-#  
-# begin
-#   require 'echoe'
+# require 'echoe'
 # 
-#   Echoe.new('association-freezer', '0.1.1') do |p|
-#     p.summary        = "Freeze an Active Record belongs_to association."
-#     p.description    = "Freeze an Active Record belongs_to association."
-#     p.url            = "http://github.com/ryanb/association-freezer"
-#     p.author         = 'Ryan Bates'
-#     p.email          = "ryan (at) railscasts (dot) com"
-#     p.ignore_pattern = ["script/*"]
-#   end
-# 
-# rescue LoadError => boom
-#   puts "You are missing a dependency required for meta-operations on this gem."
-#   puts "#{boom.to_s.capitalize}."
+# Echoe.new('association-freezer', '0.1.1') do |p|
+#   p.summary        = "Freeze an Active Record belongs_to association."
+#   p.description    = "Freeze an Active Record belongs_to association."
+#   p.url            = "http://github.com/ryanb/association-freezer"
+#   p.author         = 'Ryan Bates'
+#   p.email          = "ryan (at) railscasts (dot) com"
+#   p.ignore_pattern = ["script/*"]
 # end
 # 
 # Dir["#{File.dirname(__FILE__)}/tasks/*.rake"].sort.each { |ext| load ext }
